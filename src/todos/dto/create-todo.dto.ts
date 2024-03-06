@@ -3,5 +3,5 @@ export class CreateTodoDto {
   description: string;
   completed: boolean;
   createdAt: Date;
-  updatedAd: Date | null;
+  updatedAt: Date | null;
 }

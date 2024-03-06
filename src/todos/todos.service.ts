@@ -11,7 +11,7 @@ export class TodosService {
       title: 'Todo #1',
       description: 'Todo #1 description',
       createdAt: new Date(),
-      updatedAd: null,
+      updatedAt: null,
       completed: false,
     },
   ];
