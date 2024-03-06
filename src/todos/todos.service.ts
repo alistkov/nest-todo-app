@@ -17,7 +17,14 @@ export class TodosService {
   ];
 
   create(createTodoDto: CreateTodoDto) {
-    const createdTodo: Todo = { ...createTodoDto, id: this.todos.length };
+    const createdTodo: Todo = {
+      ...createTodoDto,
+      id: this.todos.length + 1,
+      updatedAt: null,
+      createdAt: new Date(),
+      completed: false,
+    };
+
     this.todos.push(createdTodo);
   }
 
