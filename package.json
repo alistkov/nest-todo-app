@@ -5,15 +5,14 @@
   "author": "Anton Listkov",
   "private": true,
   "license": "UNLICENSED",
-  "repository": { 
-    "type": "git", 
-    "url": "git+https://github.com/alistkov/nest-todo-app" 
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alistkov/nest-todo-app"
   },
   "bugs": {
     "url": "https://github.com/alistkov/nest-todo-app/issues"
   },
   "homepage": "https://github.com/alistkov/nest-todo-app#readme",
-
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -30,6 +29,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.2.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
     "reflect-metadata": "^0.1.13",
