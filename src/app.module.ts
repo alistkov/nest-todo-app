@@ -13,6 +13,8 @@ import { typeOrmConfig } from './config/typeorm.config';
   imports: [
     ConfigModule.forRoot({
       load: [configuration],
+      cache: true,
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync(typeOrmConfig),
     TodosModule,
