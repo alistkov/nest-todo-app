@@ -1,8 +1,42 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# TodoNest API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## About this project
+This project is a simple Todo application built using NestJS. It provides a RESTful API for managing tasks in a todo list.
 
-# Todo REST Api
+## Technologies
+- NestJS
+- TypeScript
+- TypeORM
+- PostgreSQL
+
+## Installation
+
+#### Instal dependencies
+```
+make install
+```
+
+#### Set up environment variables
+
+Before running the application, you need to set up environment variables. Create a `.env` file in the root directory and provide the variables from `.env.example` file
+
+
+#### Start dev server
+```
+make dev
+```
+
+
+#### Build app
+```
+make build
+```
+
+#### Start linter
+```
+make lint
+```
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
