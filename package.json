@@ -1,10 +1,10 @@
 {
   "name": "todo-api",
   "version": "0.0.1",
-  "description": "NestJs todo app REST api",
+  "description": "TodoNest api",
   "author": "Anton Listkov",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alistkov/nest-todo-app"
