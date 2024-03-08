@@ -1,7 +1,22 @@
+import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
+
 export class CreateTodoDto {
-  title: string;
-  description: string;
-  completed: boolean;
-  createdAt: Date;
-  updatedAt: Date | null;
+  @IsString()
+  readonly title: string;
+
+  @IsOptional()
+  @IsString()
+  readonly description: string;
+
+  @IsOptional()
+  @IsBoolean()
+  readonly completed: boolean;
+
+  @IsOptional()
+  @IsDate()
+  readonly createdAt: Date;
+
+  @IsOptional()
+  @IsDate()
+  readonly updatedAt: Date | null;
 }
