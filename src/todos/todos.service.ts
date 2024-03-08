@@ -11,11 +11,11 @@ export class TodosService {
     @InjectRepository(Todo) private todoRepository: Repository<Todo>,
   ) {}
 
-  async create(createTodoDto: CreateTodoDto): Promise<Todo> {
+  async create(createTodoDto: CreateTodoDto) {
     return await this.todoRepository.save(createTodoDto);
   }
 
-  async findAll() {
+  async findAll(): Promise<Todo[]> {
     return this.todoRepository.find();
   }
 
