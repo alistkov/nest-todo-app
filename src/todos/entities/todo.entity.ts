@@ -1,8 +1,28 @@
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
+@Entity()
 export class Todo {
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
   title: string;
-  description: string;
+
+  @Column({ default: null })
+  description: string | null;
+
+  @Column({ default: false })
   completed: boolean;
+
+  @CreateDateColumn()
   createdAt: Date;
-  updatedAt: Date | null;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
