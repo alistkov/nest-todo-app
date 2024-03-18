@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -9,12 +10,18 @@ import { User } from 'src/users/entities/user.entity';
 import { HashingService } from './hashing/hashing.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigType } from '@nestjs/config';
+import jwtConfig from 'src/config/jwt.config';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     private readonly hashingService: HashingService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
+    @Inject(jwtConfig.KEY)
+    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
@@ -46,6 +53,22 @@ export class AuthenticationService {
       throw new UnauthorizedException('Password does not match');
     }
 
-    console.log(user);
+    return this.generateToken(user);
+  }
+
+  async generateToken(user: User) {
+    const accessToken = await this.jwtService.signAsync(
+      {
+        sub: user.id,
+        email: user.email,
+      },
+      {
+        audience: this.jwtConfiguration.audience,
+        issuer: this.jwtConfiguration.issuer,
+        secret: this.jwtConfiguration.secret,
+        expiresIn: this.jwtConfiguration.accessTokenTtl,
+      },
+    );
+    return { accessToken };
   }
 }
