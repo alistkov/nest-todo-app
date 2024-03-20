@@ -1,46 +1,49 @@
 import {
+  Injectable,
   CanActivate,
   ExecutionContext,
-  Inject,
-  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigType } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
-import jwtConfig from 'src/config/jwt.config';
+import { AuthType } from '../enums/auth-type.enum';
+import { Reflector } from '@nestjs/core';
+import { AccessTokenGuard } from './access-token.guard';
+import { AUTH_TYPE_KEY } from '../decorators/auth.decorator';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
+  private static readonly defaultAuthType = AuthType.Bearer;
+  private readonly authTypeGuardMap: Record<
+    AuthType,
+    CanActivate | CanActivate[]
+  > = {
+    [AuthType.Bearer]: this.accessTokenGuard,
+    [AuthType.None]: { canActivate: () => true },
+  };
+
   constructor(
-    private readonly jwtService: JwtService,
-    @Inject(jwtConfig.KEY)
-    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+    private readonly reflector: Reflector,
+    private readonly accessTokenGuard: AccessTokenGuard,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    const authTypes = this.reflector.getAllAndOverride<AuthType[]>(
+      AUTH_TYPE_KEY,
+      [context.getHandler(), context.getClass()],
+    ) ?? [AuthenticationGuard.defaultAuthType];
+    const guards = authTypes.map((type) => this.authTypeGuardMap[type]).flat();
+    let error = new UnauthorizedException('Error from authentication guard');
 
-    if (!token) {
-      throw new UnauthorizedException('Need token');
-    }
-
-    try {
-      const payload = this.jwtService.verifyAsync(token, {
-        audience: this.jwtConfiguration.audience,
-        issuer: this.jwtConfiguration.issuer,
-        secret: this.jwtConfiguration.secret,
+    for (const instance of guards) {
+      const canActivate = await Promise.resolve(
+        instance.canActivate(context),
+      ).catch((err) => {
+        error = err;
       });
-      request['user'] = payload;
-    } catch {
-      throw new UnauthorizedException('Not valid token');
-    }
-    return true;
-  }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+      if (canActivate) {
+        return true;
+      }
+    }
+    throw error;
   }
 }
