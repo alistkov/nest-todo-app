@@ -11,7 +11,7 @@ import { Request } from 'express';
 import jwtConfig from 'src/config/jwt.config';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthenticationGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
